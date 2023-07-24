@@ -4,16 +4,13 @@ import arrow.core.raise.Raise
 import bed.mgmt.domain.model.BedAlreadyExists
 import bed.mgmt.domain.model.BedCreated
 import bed.mgmt.domain.model.BedType
-import bed.mgmt.domain.model.HospitalDoesNotExists
-import bed.mgmt.domain.model.RoomDoesNotExists
-import io.micronaut.core.annotation.Introspected
 import jakarta.inject.Singleton
 import java.util.UUID
 
 @Singleton
-class CreateBedService {
+class CreateBedService() {
 
-    context(Raise<BedAlreadyExists>, Raise<HospitalDoesNotExists>, Raise<RoomDoesNotExists>)
+    context(Raise<BedAlreadyExists>)
     operator fun invoke(request: CreateBedRequest): BedCreated = TODO()
 }
 
@@ -23,7 +20,7 @@ data class CreateBedRequest(
     val type: BedType,
     val features: List<HospitalBedFeatureRequest>,
     val extraFeatures: List<String>,
-    val manufacturerId: UUID,
+    val manufacturerBedId: String,
     val manufacturer: String,
     val details: String?
 )

@@ -6,3 +6,5 @@ tags
 
 world wide 
 other
+
+Missing hospital room mgmgt capacity etc

@@ -8,7 +8,7 @@ import bed.mgmt.domain.model.HospitalBed
 import bed.mgmt.domain.model.HospitalBedFeature
 import bed.mgmt.domain.model.HospitalBedId
 import bed.mgmt.domain.model.HospitalId
-import bed.mgmt.domain.model.ManufacturerId
+import bed.mgmt.domain.model.ManufacturerBedId
 import bed.mgmt.domain.model.RoomId
 import com.github.javafaker.Faker
 import java.util.UUID
@@ -25,7 +25,7 @@ object TestBuilders {
             faker.options().option(HospitalBedFeatureRequest::class.java)
         ),
         extraFeatures: List<String> = listOf(faker.beer().name()),
-        manufacturerId: UUID = UUID.randomUUID(),
+        manufacturerBedId: String = UUID.randomUUID().toString(),
         manufacturer: String = faker.company().name(),
         details: String = faker.lorem().paragraph(),
     ): CreateBedRequest = CreateBedRequest(
@@ -34,7 +34,7 @@ object TestBuilders {
         type = type,
         features = features,
         extraFeatures = extraFeatures,
-        manufacturerId = manufacturerId,
+        manufacturerBedId = manufacturerBedId,
         manufacturer = manufacturer,
         details = details
     )
@@ -44,7 +44,7 @@ object TestBuilders {
         location: BedLocation = BedLocation(HospitalId(UUID.randomUUID()), RoomId(UUID.randomUUID())),
         type: BedType = faker.options().option(BedType::class.java),
         characteristics: List<HospitalBedFeature> = listOf(HospitalBedFeature.Electric),
-        manufacturerId: ManufacturerId = ManufacturerId(faker.idNumber().valid()),
+        manufacturerBedId: ManufacturerBedId = ManufacturerBedId(faker.idNumber().valid()),
         manufacturer: String = faker.company().name(),
         details: String? = faker.lorem().paragraph(),
     ): HospitalBed = HospitalBed(
@@ -52,7 +52,7 @@ object TestBuilders {
         location = location,
         type = type,
         characteristics = characteristics,
-        manufacturerId = manufacturerId,
+        manufacturerBedId = manufacturerBedId,
         manufacturer = manufacturer,
         details = details,
     )

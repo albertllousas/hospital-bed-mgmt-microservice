@@ -10,13 +10,13 @@ data class HospitalBed(
     val location: BedLocation,
     val type: BedType,
     val characteristics: List<HospitalBedFeature>,
-    val manufacturerId: ManufacturerId,
+    val manufacturerBedId: ManufacturerBedId,
     val manufacturer: String,
     val details: String?,
 )
 
 @JvmInline
-value class ManufacturerId(val value: String)
+value class ManufacturerBedId(val value: String)
 
 @JvmInline
 value class HospitalId(val value: UUID)
