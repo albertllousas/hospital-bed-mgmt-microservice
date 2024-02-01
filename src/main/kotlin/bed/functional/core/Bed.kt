@@ -10,7 +10,6 @@ import java.time.LocalDate
 import java.time.LocalDate.now
 import java.util.UUID
 
-
 enum class BedFeature {
     ADJUSTABLE,
     CARDIAC_MONITOR,
