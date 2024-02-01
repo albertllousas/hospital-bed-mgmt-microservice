@@ -1,13 +1,20 @@
 package bed.imperative.shell.inputs.http
 
-import bed.functional.core.*
+import bed.functional.core.AllocateError
+import bed.functional.core.BedAlreadyAllocated
+import bed.functional.core.BedAlreadyReleased
+import bed.functional.core.BedNotFound
+import bed.functional.core.DomainError
+import bed.functional.core.ErrorReporter
+import bed.functional.core.MovePatientError
+import bed.functional.core.PatientNotFound
+import bed.functional.core.ReleaseError
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus.CONFLICT
 import io.micronaut.http.HttpStatus.NOT_FOUND
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Error
 import java.net.http.HttpRequest
-
 
 fun <T> DomainError.toHttpErrorResponse(): HttpResponse<T> = when (this) {
     BedNotFound -> HttpResponse.status(NOT_FOUND, "Bed not found")

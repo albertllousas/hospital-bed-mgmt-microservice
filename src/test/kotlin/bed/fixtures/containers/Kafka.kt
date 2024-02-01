@@ -7,7 +7,6 @@ import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
-import org.apache.kafka.common.serialization.ByteArrayDeserializer
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.rnorth.ducttape.unreliables.Unreliables
 import org.testcontainers.containers.KafkaContainer
@@ -16,7 +15,6 @@ import org.testcontainers.utility.DockerImageName
 import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.TimeUnit.SECONDS
-
 
 class Kafka(network: Network) {
     val container: KafkaContainer = KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka"))

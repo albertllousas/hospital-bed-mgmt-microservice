@@ -6,7 +6,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.Tag
 import kotlin.reflect.KClass
 
-class MetricsEventPublisher(private val metrics: MeterRegistry)  {
+class MetricsEventPublisher(private val metrics: MeterRegistry) {
 
     fun publish(event: DomainEvent) {
         val tags = listOf(Tag.of("type", event::class.simpleName!!))

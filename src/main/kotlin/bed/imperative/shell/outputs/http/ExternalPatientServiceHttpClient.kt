@@ -37,13 +37,14 @@ class ExternalHttpPatientFinder(@Value("\${clients.patients.base-url}") baseUrl:
     }
 
     private fun mapToDomainErrorOrThrow(e: HttpClientResponseException): PatientNotFound =
-         when {
-             e.response.status.code == 404 -> PatientNotFound
-             e.response is FullNettyClientHttpResponse<*> -> throw HttpCallNonSucceededException(
-                 httpClient = this@ExternalHttpPatientFinder::class.simpleName!!,
-                 errorBody = e.response.getBody(String::class.java).orElse(null),
-                 httpStatus = e.response.status.code
-             )
+        when {
+            e.response.status.code == 404 -> PatientNotFound
+            e.response is FullNettyClientHttpResponse<*> -> throw HttpCallNonSucceededException(
+                httpClient = this@ExternalHttpPatientFinder::class.simpleName!!,
+                errorBody = e.response.getBody(String::class.java).orElse(null),
+                httpStatus = e.response.status.code
+            )
+
             else -> throw e
         }
 

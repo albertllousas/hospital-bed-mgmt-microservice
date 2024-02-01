@@ -3,8 +3,6 @@ package bed.fixtures.containers
 import io.debezium.testing.testcontainers.ConnectorConfiguration
 import io.debezium.testing.testcontainers.DebeziumContainer
 import org.slf4j.LoggerFactory
-import org.testcontainers.containers.output.Slf4jLogConsumer
-
 
 class Debezium(kafka: Kafka, postgres: Postgres) {
 

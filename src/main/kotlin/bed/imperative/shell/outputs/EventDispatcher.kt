@@ -16,7 +16,7 @@ class EventDispatcher(
     private val debeziumEventPublisher: DebeziumEventPublisher,
     private val metricsEventPublisher: MetricsEventPublisher,
     private val logEventWriter: LogEventWriter,
-): EventPublisher, ErrorReporter {
+) : EventPublisher, ErrorReporter {
 
     override fun publish(events: List<DomainEvent>, transaction: Transaction) {
         events.forEach {

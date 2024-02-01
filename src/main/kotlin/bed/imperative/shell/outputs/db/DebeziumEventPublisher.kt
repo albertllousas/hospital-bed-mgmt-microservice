@@ -24,7 +24,7 @@ class DebeziumEventPublisher(
 
     fun publish(event: DomainEvent, transaction: Transaction) {
         val externalHospitalBedEvent = event.toExternalHospitalBedEvent()
-        if(transaction is JdbiTransaction) {
+        if (transaction is JdbiTransaction) {
             transaction.handle.execute(
                 """ INSERT INTO outbox (
                             id,
@@ -50,24 +50,24 @@ class DebeziumEventPublisher(
 
     }
 
-private fun DomainEvent.toExternalHospitalBedEvent(): ExternalHospitalBedEvent =
-    HospitalBedCreatedEvent(
-        hospitalBed = ExternalHospitalBedDto(
-            id = bed.id.value,
-            roomId = bed.roomId.value,
-            ward = bed.ward.name,
-            status = when(bed.status) {
-                is Occupied -> "OCCUPIED"
-                Free -> "FREE"
-            },
-            patientId = if(bed.status is Occupied) (bed.status as Occupied).by.value else null,
-            occupiedFrom = if(bed.status is Occupied) (bed.status as Occupied).from else null,
-            occupiedTo = if(bed.status is Occupied) (bed.status as Occupied).to else null,
-            features = bed.features.map { it.name },
-        ),
-        occurredOn = LocalDateTime.now(clock),
-        eventId = generateId()
-    )
+    private fun DomainEvent.toExternalHospitalBedEvent(): ExternalHospitalBedEvent =
+        HospitalBedCreatedEvent(
+            hospitalBed = ExternalHospitalBedDto(
+                id = bed.id.value,
+                roomId = bed.roomId.value,
+                ward = bed.ward.name,
+                status = when (bed.status) {
+                    is Occupied -> "OCCUPIED"
+                    Free -> "FREE"
+                },
+                patientId = if (bed.status is Occupied) (bed.status as Occupied).by.value else null,
+                occupiedFrom = if (bed.status is Occupied) (bed.status as Occupied).from else null,
+                occupiedTo = if (bed.status is Occupied) (bed.status as Occupied).to else null,
+                features = bed.features.map { it.name },
+            ),
+            occurredOn = LocalDateTime.now(clock),
+            eventId = generateId()
+        )
 }
 
 /*

@@ -3,10 +3,11 @@ package bed.functional.core
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import bed.functional.core.BedStatus.*
+import bed.functional.core.BedStatus.Free
+import bed.functional.core.BedStatus.Occupied
 import java.time.Clock
 import java.time.LocalDate
-import java.time.LocalDate.*
+import java.time.LocalDate.now
 import java.util.UUID
 
 

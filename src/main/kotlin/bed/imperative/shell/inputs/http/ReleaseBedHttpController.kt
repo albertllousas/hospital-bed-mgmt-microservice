@@ -14,7 +14,6 @@ import io.micronaut.http.HttpResponse.noContent
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Patch
 import io.micronaut.http.annotation.PathVariable
-import jakarta.inject.Named
 import java.util.UUID
 
 @Controller("/beds/{bedId}/release")

@@ -9,7 +9,7 @@ import kotlin.reflect.KClass
 
 class LogEventWriter(
     private val logger: Logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()),
-)  {
+) {
 
     fun log(event: DomainEvent) {
         val msg = "domain-event: '${event::class.simpleName}', bed-id: '${event.bed.id.value}'"
