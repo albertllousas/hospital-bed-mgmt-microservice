@@ -4,15 +4,20 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.8.22"
     id("com.google.devtools.ksp") version "1.8.22-1.0.11"
-    id("io.micronaut.application") version "4.0.0-M8"
+    id("io.micronaut.application") version "4.2.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 object Versions {
+    const val POSTGRES = "42.2.23"
     const val JUNIT = "5.9.1"
     const val MOCKK = "1.13.5"
-    const val ARROW = "1.2.0-RC"
+    const val ARROW = "1.2.1"
     const val ASSERTJ = "3.23.1"
+    const val JDBI = "3.29.0"
+    const val TESTCONTAINERS = "1.17.2"
+    const val FLYWAY = "8.5.11"
+    const val WIREMOCK = "2.27.2"
 }
 
 application {
@@ -20,8 +25,8 @@ application {
 }
 
 repositories {
-    google()
     mavenCentral()
+    google()
 }
 
 dependencies {
@@ -29,12 +34,26 @@ dependencies {
 //  implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.arrow-kt:arrow-core:${Versions.ARROW}")
     ksp("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime:4.2.0")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
-    runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.zaxxer:HikariCP:4.0.3")
+    implementation("org.jdbi:jdbi3-core:3.43.0")
+//    implementation("io.micronaut.data:micronaut-data-jdbc")
+    implementation("io.micronaut.kafka:micronaut-kafka")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut:micronaut-http-client")
 
+//    implementation("io.micronaut.micrometer:micronaut-management")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-statsd")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    implementation("org.postgresql:postgresql:${Versions.POSTGRES}")
+//    implementation("org.jdbi:jdbi3-core:${Versions.JDBI}")
+    implementation("org.flywaydb:flyway-core:${Versions.FLYWAY}")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.0")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.9.0")
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation(group = "io.mockk", name = "mockk", version = Versions.MOCKK)
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
@@ -45,7 +64,13 @@ dependencies {
     testImplementation("com.github.javafaker:javafaker:1.0.2") {
         exclude(group = "org.yaml", module = "snakeyaml")
     }
-    testImplementation("org.yaml:snakeyaml:2.0")
+    testImplementation(group =  "org.testcontainers", name = "testcontainers", version = Versions.TESTCONTAINERS)
+    testImplementation(group =  "org.testcontainers", name = "kafka", version = Versions.TESTCONTAINERS)
+    testImplementation("org.testcontainers:postgresql:${Versions.TESTCONTAINERS}")
+    testImplementation("io.debezium:debezium-testing-testcontainers:2.4.1.Final")
+    testImplementation("com.github.tomakehurst:wiremock:${Versions.WIREMOCK}")
+    testImplementation("io.rest-assured:rest-assured:4.4.0")
+    runtimeOnly("org.yaml:snakeyaml:2.0")
 }
 
 tasks.apply {

@@ -1,0 +1,26 @@
+micronaut:
+  server:
+    port: 8080
+  application:
+    name: hospital bed management
+
+datasource:
+  jdbc-url: ${JDBC_URL:}
+  username:  ${JDBC_USERNAME:}
+  password:  ${JDBC_PASSWORD:}
+  driver-class-name: org.postgresql.Driver
+
+hikari:
+  maximumPoolSize: 10
+  minimumIdle: 5
+  idleTimeout: 10000
+  maxLifetime: 600000
+  connectionTimeout: 30000
+  poolName: "MyHikariPool"
+
+logger:
+  levels: DEBUG
+
+clients:
+  patients:
+    base-url: http://my-domain.patients:80
