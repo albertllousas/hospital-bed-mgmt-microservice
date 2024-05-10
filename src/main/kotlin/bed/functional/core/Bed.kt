@@ -10,39 +10,6 @@ import java.time.LocalDate
 import java.time.LocalDate.now
 import java.util.UUID
 
-enum class BedFeature {
-    ADJUSTABLE,
-    CARDIAC_MONITOR,
-    BARIATRIC,
-    PRESSURE_RELIEF,
-    ELECTRIC,
-    MANUAL,
-    WITH_RAILS,
-    WITHOUT_RAILS,
-    ADVANCED_MONITORING, // ICU-specific: Advanced patient monitoring systems
-    LIFE_SUPPORT_COMPATIBLE, // ICU-specific: Compatibility with life support systems
-    EMERGENCY_FEATURES // ICU-specific: Features for quick emergency response
-    // Add more ICU-specific or general features as necessary
-}
-
-enum class Ward {
-    CARDIOLOGY,
-    ONCOLOGY,
-    PEDIATRICS,
-    MATERNITY,
-    ICU
-    // other wards
-}
-
-data class BedId(val value: UUID)
-
-data class RoomId(val value: String)
-
-sealed class BedStatus {
-    object Free : BedStatus()
-    data class Occupied(val by: PatientId, val from: LocalDate, val to: LocalDate? = null) : BedStatus()
-}
-
 data class Bed(
     val id: BedId,
     val roomId: RoomId,
@@ -92,4 +59,38 @@ data class Bed(
     }
 
     private fun addEvent(event: DomainEvent): Bed = copy(events = events + event)
+}
+
+
+enum class BedFeature {
+    ADJUSTABLE,
+    CARDIAC_MONITOR,
+    BARIATRIC,
+    PRESSURE_RELIEF,
+    ELECTRIC,
+    MANUAL,
+    WITH_RAILS,
+    WITHOUT_RAILS,
+    ADVANCED_MONITORING, // ICU-specific: Advanced patient monitoring systems
+    LIFE_SUPPORT_COMPATIBLE, // ICU-specific: Compatibility with life support systems
+    EMERGENCY_FEATURES // ICU-specific: Features for quick emergency response
+    // Add more ICU-specific or general features as necessary
+}
+
+enum class Ward {
+    CARDIOLOGY,
+    ONCOLOGY,
+    PEDIATRICS,
+    MATERNITY,
+    ICU
+    // other wards
+}
+
+data class BedId(val value: UUID)
+
+data class RoomId(val value: String)
+
+sealed class BedStatus {
+    object Free : BedStatus()
+    data class Occupied(val by: PatientId, val from: LocalDate, val to: LocalDate? = null) : BedStatus()
 }
