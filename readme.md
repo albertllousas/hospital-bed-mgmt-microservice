@@ -15,3 +15,11 @@ A bed hospital management system, using [functional-core, imperative shell](http
 - The system must allow staff to add new beds to the system
 - The system shall allow the release of a bed when a patient is discharged
 - The system shall facilitate the transfer of a patient from one bed to another within the hospital
+
+## Debezium conf:
+
+It is used only in the test env, for a prod usage it should be configured:
+
+[Debezium test container](/src/test/kotlin/bed/fixtures/containers/Debezium.kt)
+
+
