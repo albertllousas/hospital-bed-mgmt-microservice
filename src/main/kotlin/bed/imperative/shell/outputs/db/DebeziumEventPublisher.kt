@@ -1,10 +1,16 @@
 package bed.imperative.shell.outputs.db
 
+import bed.functional.core.Bed
+import bed.functional.core.BedAllocated
+import bed.functional.core.BedCreated
+import bed.functional.core.BedReleased
 import bed.functional.core.BedStatus.Free
 import bed.functional.core.BedStatus.Occupied
 import bed.functional.core.DomainEvent
 import bed.functional.core.Transaction
+import bed.imperative.shell.outputs.db.ExternalHospitalBedEvent.HospitalBedAllocatedEvent
 import bed.imperative.shell.outputs.db.ExternalHospitalBedEvent.HospitalBedCreatedEvent
+import bed.imperative.shell.outputs.db.ExternalHospitalBedEvent.HospitalBedReleasedEvent
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -51,22 +57,26 @@ class DebeziumEventPublisher(
     }
 
     private fun DomainEvent.toExternalHospitalBedEvent(): ExternalHospitalBedEvent =
-        HospitalBedCreatedEvent(
-            hospitalBed = ExternalHospitalBedDto(
-                id = bed.id.value,
-                roomId = bed.roomId.value,
-                ward = bed.ward.name,
-                status = when (bed.status) {
-                    is Occupied -> "OCCUPIED"
-                    Free -> "FREE"
-                },
-                patientId = if (bed.status is Occupied) (bed.status as Occupied).by.value else null,
-                occupiedFrom = if (bed.status is Occupied) (bed.status as Occupied).from else null,
-                occupiedTo = if (bed.status is Occupied) (bed.status as Occupied).to else null,
-                features = bed.features.map { it.name },
-            ),
-            occurredOn = LocalDateTime.now(clock),
-            eventId = generateId()
+        when (this) {
+            is BedCreated -> HospitalBedCreatedEvent(bed.toExternalHospitalBedDto(), LocalDateTime.now(clock), generateId())
+            is BedAllocated -> HospitalBedAllocatedEvent(bed.toExternalHospitalBedDto(), LocalDateTime.now(clock), generateId())
+            is BedReleased -> HospitalBedReleasedEvent(bed.toExternalHospitalBedDto(), LocalDateTime.now(clock), generateId())
+        }
+
+
+    private fun Bed.toExternalHospitalBedDto(): ExternalHospitalBedDto =
+        ExternalHospitalBedDto(
+            id = id.value,
+            roomId = roomId.value,
+            ward = ward.name,
+            status = when (status) {
+                is Occupied -> "OCCUPIED"
+                bed.functional.core.BedStatus.Free -> "FREE"
+            },
+            patientId = if (status is Occupied) status.by.value else null,
+            occupiedFrom = if (status is Occupied) status.from else null,
+            occupiedTo = if (status is Occupied) status.to else null,
+            features = features.map { it.name },
         )
 }
 
@@ -76,6 +86,8 @@ External event: Event to share changes to other bounded contexts.
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "event_type")
 @JsonSubTypes(
     JsonSubTypes.Type(value = HospitalBedCreatedEvent::class, name = "hospital_bed_created_event"),
+    JsonSubTypes.Type(value = HospitalBedAllocatedEvent::class, name = "hospital_bed_allocated_event"),
+    JsonSubTypes.Type(value = HospitalBedReleasedEvent::class, name = "hospital_bed_released_event"),
 )
 sealed class ExternalHospitalBedEvent(
     @get:JsonProperty("event_type") val eventType: String
@@ -94,6 +106,18 @@ sealed class ExternalHospitalBedEvent(
         override val occurredOn: LocalDateTime,
         override val eventId: UUID,
     ) : ExternalHospitalBedEvent("hospital_bed_created_event")
+
+    data class HospitalBedAllocatedEvent(
+        override val hospitalBed: ExternalHospitalBedDto,
+        override val occurredOn: LocalDateTime,
+        override val eventId: UUID,
+    ) : ExternalHospitalBedEvent("hospital_bed_allocated_event")
+
+    data class HospitalBedReleasedEvent(
+        override val hospitalBed: ExternalHospitalBedDto,
+        override val occurredOn: LocalDateTime,
+        override val eventId: UUID,
+    ) : ExternalHospitalBedEvent("hospital_bed_released_event")
 }
 
 data class ExternalHospitalBedDto(
